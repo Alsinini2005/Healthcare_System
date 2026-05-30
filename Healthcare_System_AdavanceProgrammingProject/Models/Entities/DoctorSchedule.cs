@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HealthcareClinic.API.Models.Entities
@@ -7,6 +9,7 @@ namespace HealthcareClinic.API.Models.Entities
     {
         [Key]
         public int Id { get; set; }
+
 
         [Required]
         public int DoctorId { get; set; }
@@ -17,11 +20,13 @@ namespace HealthcareClinic.API.Models.Entities
         [Required]
         public DayOfWeek Day { get; set; }
 
+
         [Required]
         public TimeSpan StartTime { get; set; }
 
         [Required]
         public TimeSpan EndTime { get; set; }
+
 
         public bool IsAvailable { get; set; } = true;
     }

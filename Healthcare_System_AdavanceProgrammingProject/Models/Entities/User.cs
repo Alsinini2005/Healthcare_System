@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
+
 
 namespace HealthcareClinic.API.Models.Entities
 {
@@ -11,8 +13,9 @@ namespace HealthcareClinic.API.Models.Entities
         [Required(ErrorMessage = "CPR is required.")]
         [RegularExpression(@"^\d{9}$", ErrorMessage = "CPR must contain exactly 9 digits.")]
         public string CPR { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty; // Patient, Doctor, Receptionist, ClinicManager
         public bool IsActive { get; set; } = true; // FIX #4: doctor active/inactive status
+        public string Role { get; set; } = string.Empty; // Patient, Doctor, Receptionist, ClinicManager
+        
 
         // Navigation property
         public List<Notification> Notifications { get; set; } = new();
