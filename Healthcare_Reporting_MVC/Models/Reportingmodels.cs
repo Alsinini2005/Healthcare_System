@@ -1,4 +1,6 @@
-﻿namespace HealthcareClinic.ReportingApp.Models
+﻿
+
+namespace HealthcareClinic.ReportingApp.Models
 {
     // Result from api/auth/login
     public class LoginResultModel
@@ -11,8 +13,9 @@
     // Result from api/reports/dashboard-stats
     public class DashboardStatsModel
     {
-        public int TotalAppointments { get; set; }
         public int CompletedAppointments { get; set; }
+        public int TotalAppointments { get; set; }
+        
         public int MissedAppointments { get; set; }
     }
 
@@ -20,17 +23,23 @@
     public class OperationalReportModel
     {
         public int TotalAppointments { get; set; }
-        public int CompletedAppointments { get; set; }
+        
         public int MissedAppointments { get; set; }
+
         public double MissedRate { get; set; }
+        public int CompletedAppointments { get; set; }
         public List<DoctorUtilizationModel> DoctorUtilizationMetrics { get; set; } = new();
+
     }
 
     public class DoctorUtilizationModel
     {
+
         public int DoctorId { get; set; }
-        public string DoctorName { get; set; } = string.Empty;
         public int BookedAppointmentsCount { get; set; }
+        public string DoctorName { get; set; } = string.Empty;
+
+       
         public double UtilizationPercentage { get; set; }
     }
 
