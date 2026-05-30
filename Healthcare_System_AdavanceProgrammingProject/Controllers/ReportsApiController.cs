@@ -76,5 +76,6 @@ namespace HealthcareClinic.API.Controllers
 
             return Ok(report);
         }
+        
     }
 }
