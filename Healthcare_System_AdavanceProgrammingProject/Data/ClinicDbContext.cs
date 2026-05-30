@@ -107,7 +107,7 @@ namespace HealthcareClinic.API.Data
         PasswordHash = hashedPassword,
         Role = "ClinicManager",
         IsActive = true,
-        CPR = 123456789
+        CPR = "123456789"
     },
     new User
     {
@@ -117,7 +117,7 @@ namespace HealthcareClinic.API.Data
         PasswordHash = hashedPassword,
         Role = "Doctor",
         IsActive = true,
-        CPR = 234567891
+        CPR = "234567891"
     },
     new User
     {
@@ -127,7 +127,7 @@ namespace HealthcareClinic.API.Data
         PasswordHash = hashedPassword,
         Role = "Doctor",
         IsActive = true,
-        CPR = 345678912
+        CPR = "345678912"
     },
     new User
     {
@@ -137,7 +137,7 @@ namespace HealthcareClinic.API.Data
         PasswordHash = hashedPassword,
         Role = "Receptionist",
         IsActive = true,
-        CPR = 456789123
+        CPR = "456789123"
     },
     new User
     {
@@ -147,7 +147,7 @@ namespace HealthcareClinic.API.Data
         PasswordHash = hashedPassword,
         Role = "Patient",
         IsActive = true,
-        CPR = 567891234
+        CPR = "567891234"
     },
     new User
     {
@@ -157,7 +157,7 @@ namespace HealthcareClinic.API.Data
         PasswordHash = hashedPassword,
         Role = "Patient",
         IsActive = true,
-        CPR = 678912345
+        CPR = "678912345"
     }
 
             );
@@ -176,7 +176,7 @@ namespace HealthcareClinic.API.Data
                 Email = "sarah.ahmed@clinic.com",
                 WorkingHours = "08:00 - 16:00",
                 DaysOff = "Friday, Saturday",
-                CPR = 234567891
+                CPR = "234567891"
             },
             new Doctor
             {
@@ -186,7 +186,7 @@ namespace HealthcareClinic.API.Data
                 Email = "khalid.nasser@clinic.com",
                 WorkingHours = "09:00 - 17:00",
                 DaysOff = "Friday, Saturday",
-                CPR = 345678912
+                CPR = "345678912"
             }
         );
 

@@ -13,9 +13,8 @@ namespace HealthcareClinic.API.Models.Entities
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "CPR is required.")]
-        [Range(100000000, 999999999,
-    ErrorMessage = "CPR must contain exactly 9 digits.")]
-        public long CPR { get; set; }
+        [RegularExpression(@"^\d{9}$", ErrorMessage = "CPR must contain exactly 9 digits.")]
+        public string CPR { get; set; } = string.Empty;
 
         public string WorkingHours { get; set; } = "08:00 - 16:00";
 

@@ -53,7 +53,20 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Working Hours</label>
-                    <input asp-for="WorkingHours" class="form-control" placeholder="e.g. 08:00 - 16:00" required />
+                    <div class="d-flex align-items-center gap-2">
+                        <div>
+                            <label class="form-label text-muted small">From</label>
+                            <input type="time" id="startTime" class="form-control" value="08:00" required />
+                        </div>
+                        <div class="mt-3">—</div>
+                        <div>
+                            <label class="form-label text-muted small">To</label>
+                            <input type="time" id="endTime" class="form-control" value="16:00" required />
+                        </div>
+                    </div>
+                    <!-- hidden field that combines both into "08:00 - 16:00" format for the model -->
+                    <input asp-for="WorkingHours" type="hidden" id="workingHoursHidden" />
+                    <span asp-validation-for="WorkingHours" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
@@ -87,6 +100,21 @@
                 </div>
 
             </form>
+            @section Scripts {
+                <script>
+                                function updateWorkingHours() {
+                                    var start = document.getElementById('startTime').value;
+                                    var end = document.getElementById('endTime').value;
+                                    document.getElementById('workingHoursHidden').value = start + ' - ' + end;
+                                }
+
+                                document.getElementById('startTime').addEventListener('change', updateWorkingHours);
+                                document.getElementById('endTime').addEventListener('change', updateWorkingHours);
+
+                                // Run once on load to populate the hidden field
+                                updateWorkingHours();
+                </script>
+            }
         </div>
     </div>
 

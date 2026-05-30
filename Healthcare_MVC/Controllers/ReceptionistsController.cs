@@ -38,8 +38,13 @@ namespace Healthcare_System_AdavanceProgrammingProject.MVC.Controllers
             string name,
             string email,
             string password,
-            long cpr)
+            String cpr)
         {
+            if (string.IsNullOrWhiteSpace(cpr) || !System.Text.RegularExpressions.Regex.IsMatch(cpr, @"^\d{9}$"))
+            {
+                TempData["ErrorMessage"] = "CPR must be exactly 9 digits (numbers only).";
+                return View();
+            }
             bool emailExists = await _context.Users
                 .AnyAsync(u => u.Email == email);
 
