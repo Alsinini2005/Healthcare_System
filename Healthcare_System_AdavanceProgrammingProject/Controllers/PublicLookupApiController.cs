@@ -54,5 +54,6 @@ namespace HealthcareClinic.API.Controllers
 
             return Ok(upcomingData);
         }
+        
     }
 }
