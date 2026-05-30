@@ -1,9 +1,13 @@
+
+
 using HealthcareClinic.ReportingApp.Models;
 using HealthcareClinic.ReportingApp.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+
+
 
 namespace HealthcareClinic.ReportingApp.Controllers
 {
@@ -61,13 +65,17 @@ namespace HealthcareClinic.ReportingApp.Controllers
             return RedirectToAction("Index", "Dashboard");
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
+
             HttpContext.Session.Clear();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
+
         }
     }
 }

@@ -1,12 +1,18 @@
-﻿using HealthcareClinic.ReportingApp.Services;
+﻿
+
+using HealthcareClinic.ReportingApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
+
 namespace HealthcareClinic.ReportingApp.Controllers
 {
+
     [Authorize(Roles = "ClinicManager")]
     public class DashboardController : Controller
     {
+
         private readonly ReportingApiService _apiService;
 
         public DashboardController(ReportingApiService apiService)
@@ -23,6 +29,7 @@ namespace HealthcareClinic.ReportingApp.Controllers
                 TempData["ErrorMessage"] = "Unable to retrieve data from the API. Please try again.";
                 return View(stats);
             }
+
             return View(stats);
         }
 
@@ -34,6 +41,7 @@ namespace HealthcareClinic.ReportingApp.Controllers
             {
                 TempData["ErrorMessage"] = "Unable to retrieve report data from the API.";
                 return View(report);
+
             }
             return View(report);
         }
