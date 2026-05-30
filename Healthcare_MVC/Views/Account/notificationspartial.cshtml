@@ -1,0 +1,63 @@
+﻿
+@using HealthcareClinic.API.Data
+@using Microsoft.EntityFrameworkCore
+@inject ClinicDbContext DbContext
+
+@{
+    // Get current user's ID from claims
+    var userEmail = User.Identity?.Name ?? string.Empty;
+    var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == userEmail.ToLower());
+    var notifications = user != null
+        ? await DbContext.Notifications
+            .Where(n => n.UserId == user.Id)
+            .OrderByDescending(n => n.CreatedAt)
+            .Take(10)
+            .ToListAsync()
+        : new List<HealthcareClinic.API.Models.Entities.Notification>();
+
+    int unreadCount = notifications.Count(n => !n.IsRead);
+}
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle position-relative" href="#" role="button" data-bs-toggle="dropdown">
+        <i class="bi bi-bell-fill"></i>
+        @if (unreadCount > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  style="font-size:0.6rem">
+                @unreadCount
+            </span>
+        }
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width:320px; max-height:400px; overflow-y:auto;">
+        <li class="dropdown-header fw-bold px-3 py-2 border-bottom">
+            Notifications
+            @if (unreadCount > 0)
+            {
+                <span class="badge bg-danger ms-1">@unreadCount new</span>
+            }
+        </li>
+        @if (!notifications.Any())
+        {
+            <li class="px-3 py-3 text-muted small text-center">No notifications yet.</li>
+        }
+        @foreach (var n in notifications)
+        {
+            <li class="px-3 py-2 border-bottom @(n.IsRead ? "" : "bg-light")">
+                <div class="small @(n.IsRead ? "text-muted" : "text-dark fw-bold")">
+                    @n.Message
+                </div>
+                <div class="text-muted" style="font-size:0.7rem">
+                    @n.CreatedAt.ToLocalTime().ToString("g")
+                </div>
+            </li>
+        }
+        @if (notifications.Any())
+        {
+            <li class="text-center py-2">
+                <a asp-controller="Notifications" asp-action="MarkAllRead"
+                   class="small text-primary">Mark all as read</a>
+            </li>
+        }
+    </ul>
+</li>

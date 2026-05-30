@@ -1,0 +1,204 @@
+﻿@model Healthcare_System_AdavanceProgrammingProject.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Physician Clinical Console";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <h3 class="mb-4 text-dark font-weight-bold">
+                <i class="bi bi-stethoscope"></i> Clinical Encounter Workflow Console
+            </h3>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success shadow-sm">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger shadow-sm">@TempData["ErrorMessage"]</div>
+            }
+
+            @* ── Active Appointments Queue ── *@
+            <div class="card border-0 shadow-sm rounded-3 mb-5">
+                <div class="card-header bg-info text-white font-weight-bold py-3">
+                    Active Patient Consultation Queue
+                </div>
+                <div class="card-body p-0 table-responsive">
+                    <table class="table table-hover align-middle mb-0 text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Patient Name</th>
+                                <th>Department</th>
+                                <th>Time Slot</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!Model.ActiveAppointments.Any())
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-muted py-4 text-center">
+                                        No active appointments in your queue today.
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var app in Model.ActiveAppointments)
+                            {
+                                string badgeColor = app.Status switch
+                                {
+                                    "Confirmed" => "bg-primary",
+                                    "Requested" => "bg-warning text-dark",
+                                    "CheckedIn" => "bg-info text-white",
+                                    "InProgress" => "bg-secondary text-white",
+                                    _ => "bg-secondary"
+                                };
+                                <tr>
+                                    <td class="font-weight-bold">#@app.Id</td>
+                                    <td>@app.Patient?.Name</td>
+                                    <td>@app.Specialty</td>
+                                    <td>@app.AppointmentDate.ToString("dddd, dd MMM yyyy - hh:mm tt")</td>
+                                    <td><span class="badge @badgeColor">@app.Status</span></td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm px-3"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#logBox-@app.Id">
+                                            Open Diagnostic Journal
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr id="logBox-@app.Id" class="collapse bg-light border-bottom">
+                                    <td colspan="6" class="p-4 text-start">
+                                        <form asp-action="LogVisitAndDiagnosis" method="post" class="row g-3">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" asp-for="NewVisitPlaceholder.AppointmentId" value="@app.Id" />
+                                            <div class="col-md-6">
+                                                <label class="form-label font-weight-bold small text-muted">Primary Diagnosis</label>
+                                                <input asp-for="NewVisitPlaceholder.Diagnosis" class="form-control border-2"
+                                                       placeholder="e.g. Essential Hypertension" required />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label font-weight-bold small text-muted">
+                                                    Medication
+                                                </label>
+
+                                                <input name="MedicationName"
+                                                       class="form-control border-2"
+                                                       placeholder="Medication Name"
+                                                       required />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class="form-label font-weight-bold small text-muted">
+                                                    Dosage
+                                                </label>
+
+                                                <input name="Dosage"
+                                                       class="form-control border-2"
+                                                       placeholder="e.g. 500mg"
+                                                       required />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class="form-label font-weight-bold small text-muted">
+                                                    Frequency
+                                                </label>
+
+                                                <input name="Frequency"
+                                                       class="form-control border-2"
+                                                       placeholder="e.g. Twice daily"
+                                                       required />
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class="form-label font-weight-bold small text-muted">
+                                                    Duration
+                                                </label>
+
+                                                <input name="Duration"
+                                                       class="form-control border-2"
+                                                       placeholder="e.g. 7 days"
+                                                       required />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label font-weight-bold small text-muted">Physician Notes</label>
+                                                <textarea asp-for="NewVisitPlaceholder.DoctorNotes" class="form-control border-2"
+                                                          rows="3" placeholder="Log vitals, observations..."></textarea>
+                                            </div>
+                                            <div class="col-12 text-end">
+                                                <button type="submit" class="btn btn-success font-weight-bold px-4">
+                                                    Commit Clinical Record & Complete Visit
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @* ── Past Visit Records with Prescription Form ── *@
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-secondary text-white font-weight-bold py-3">
+                    Past Visit Records & Prescriptions
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.PastMedicalHistory == null || !Model.PastMedicalHistory.Any())
+                    {
+                        <p class="text-muted p-4 mb-0">No past visit records found.</p>
+                    }
+                    @foreach (var visit in Model.PastMedicalHistory)
+                    {
+                        <div class="border-bottom p-4">
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <small class="text-muted">Visit Date</small>
+                                    <div class="fw-bold">@visit.VisitDate.ToString("d")</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted">Patient</small>
+                                    <div class="fw-bold">@visit.Appointment?.Patient?.Name</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted">Diagnosis</small>
+                                    <div>@visit.Diagnosis</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted">Treatment</small>
+                                    <div>@visit.PrescribedTreatment</div>
+                                </div>
+                            </div>
+
+                            @* Existing Prescriptions *@
+                            @if (visit.Prescriptions.Any())
+                            {
+                                <div class="mt-2 mb-3">
+                                    <small class="text-muted fw-bold">Prescriptions:</small>
+                                    <div class="mt-1">
+                                        @foreach (var rx in visit.Prescriptions)
+                                        {
+                                            <span class="badge bg-success me-1 mb-1 px-2 py-1">
+                                                @rx.MedicationName @rx.Dosage — @rx.Frequency for @rx.Duration
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            
+                            
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

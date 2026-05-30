@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Add Receptionist";
+}
+
+<div class="container mt-4">
+
+    <div class="card border-0 shadow-sm rounded-3">
+
+        <div class="card-header bg-primary text-white">
+            Add Receptionist
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        Name
+                    </label>
+
+                    <input name="name"
+                           class="form-control"
+                           required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold"> 
+                        Email
+                    </label>
+
+                    <input name="email"
+                           type="email"
+                           class="form-control"
+                           required />
+                </div>
+                <div class="mb-3">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">CPR</label>
+
+                        <input name="cpr"
+                               type="text"
+                               class="form-control"
+                               maxlength="9"
+                               pattern="\d{9}"
+                               inputmode="numeric"
+                               placeholder="Enter 9-digit CPR"
+                               required />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        Password
+                    </label>
+
+                    <input name="password"
+                           type="password"
+                           class="form-control"
+                           required />
+                </div>
+
+                <button type="submit"
+                        class="btn btn-success">
+
+                    Save Receptionist
+
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+</div>

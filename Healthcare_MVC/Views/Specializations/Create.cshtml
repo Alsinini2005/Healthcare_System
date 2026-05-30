@@ -1,0 +1,42 @@
+﻿@model HealthcareClinic.API.Models.Entities.Specialization
+
+@{
+    ViewData["Title"] = "Add Specialty";
+}
+
+
+<div class="container mt-4">
+
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-primary text-white">
+            Add Specialty
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <div class="mb-3">
+                    <label asp-for="Name"
+                           class="form-label fw-bold">
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control" />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-success">
+                    Save Specialty
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

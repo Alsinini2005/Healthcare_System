@@ -1,0 +1,91 @@
+﻿@model HealthcareClinic.ReportingApp.Models.DashboardStatsModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int total = Model?.TotalAppointments ?? 0;
+    int completed = Model?.CompletedAppointments ?? 0;
+    int missed = Model?.MissedAppointments ?? 0;
+    double completionRate = total > 0 ? Math.Round((double)completed / total * 100, 1) : 0;
+}
+
+<div class="topbar">
+    <div>
+        <h5 class="mb-0 fw-bold">Clinic Overview</h5>
+        <small class="text-muted">Live data from the Web API</small>
+    </div>
+    <span class="badge bg-success px-3 py-2">
+        <i class="bi bi-circle-fill me-1" style="font-size:0.5rem"></i>API Connected
+    </span>
+</div>
+
+@if (Model == null)
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        Could not load data from the API. Make sure the API is running.
+    </div>
+}
+else
+{
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <div class="display-6 fw-bold text-primary">@total</div>
+                <div class="text-muted small mt-1">Total Appointments</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <div class="display-6 fw-bold text-success">@completed</div>
+                <div class="text-muted small mt-1">Completed</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <div class="display-6 fw-bold text-dark">@missed</div>
+                <div class="text-muted small mt-1">Missed</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <h6 class="fw-bold mb-3">Completion Rate</h6>
+                <div class="d-flex align-items-center mb-2">
+                    <span class="fw-bold text-success me-2">@completionRate%</span>
+                    <small class="text-muted">of all appointments completed</small>
+                </div>
+                <div class="progress" style="height:10px; border-radius:10px;">
+                    <div class="progress-bar bg-success" style="width:@completionRate%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <h6 class="fw-bold mb-3">Quick Summary</h6>
+                <table class="table table-sm mb-0">
+                    <tbody>
+                        <tr>
+                            <td class="text-muted">Missed Rate</td>
+                            <td class="fw-bold text-dark">
+                                @(total > 0 ? Math.Round((double)missed / total * 100, 1) : 0)%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Active (not ended)</td>
+                            <td class="fw-bold text-primary">@(total - completed - missed)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3 text-end">
+        <a asp-action="OperationalReport" class="btn btn-primary px-4">
+            <i class="bi bi-clipboard-data me-2"></i>View Full Operational Report
+        </a>
+    </div>
+}

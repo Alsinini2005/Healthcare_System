@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Clinical Data Privacy Policy";
+}
+
+<div class="container mt-4">
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-dark text-white p-4">
+            <h2 class="mb-1 font-weight-bold"><i class="bi bi-shield-lock"></i> Healthcare Privacy & Governance Policy</h2>
+            <p class="mb-0 text-white-50 small">System Compliance Version: 2026.1</p>
+        </div>
+        <div class="card-body p-4 text-dark font-small">
+            <p class="lead text-muted mb-4">
+                This policy outlines the security standards, encryption policies, and data processing protocols utilized within the Integrated Healthcare Clinic Management System architecture.
+            </p>
+
+            <h5 class="font-weight-bold text-primary mb-2"><i class="bi bi-key-fill"></i> Cryptographic Token Protections (JWT)</h5>
+            <p class="text-muted mb-4">
+                All communications passing between the client application nodes and the secure Web API database server require an active JSON Web Token (JWT). Identity tokens utilize cryptographically signed role payloads (Receptionist, Doctor, ClinicManager) to enforce isolation and prevent cross-tenant privilege mutations.
+            </p>
+
+            <h5 class="font-weight-bold text-primary mb-2"><i class="bi bi-database-fill-lock"></i> Clinical Health Records Security</h5>
+            <p class="text-muted mb-4">
+                Patient consultation data, diagnostics, and prescriptions recorded within the system are subject to access tracking logging. Medical records are restricted exclusively to assigned practitioners, and unauthenticated public endpoints are restricted strictly to read-only appointment scheduling queries using double-factor validation (CPR and Reference Token verification).
+            </p>
+
+            <div class="alert alert-warning p-3 mb-0 rounded-2">
+                <strong class="text-uppercase"><i class="bi bi-exclamation-triangle-fill"></i> System Notice:</strong>
+                This application instance is running in an academic staging development environment. No actual production Patient Health Information (PHI) should be recorded within this database instance.
+            </div>
+        </div>
+    </div>
+</div>

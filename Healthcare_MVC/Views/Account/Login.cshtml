@@ -1,0 +1,62 @@
+﻿@model Healthcare_System_AdavanceProgrammingProject.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "System Portal Authentication";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-primary text-white text-center py-4 border-0">
+                    <h4 class="mb-1 text-uppercase tracking-wider font-weight-bold text-white">Clinic Management Portal</h4>
+                    <p class="mb-0 text-white-50 small">Internal Personnel Secure Entry Terminal</p>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label font-weight-bold text-dark small">Corporate Email Address</label>
+                            <input asp-for="Email" class="form-control form-control-lg border-2 shadow-sm" placeholder="username@clinic.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label font-weight-bold text-dark small">Secure Password</label>
+                            <input asp-for="Password" class="form-control form-control-lg border-2 shadow-sm" placeholder="••••••••" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4 form-check d-flex justify-content-between align-items-center">
+                            <div>
+                                <input asp-for="RememberMe" class="form-check-input" />
+                                <label asp-for="RememberMe" class="form-check-label text-muted small">Remember this station</label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm py-2 text-uppercase font-weight-bold">
+                            Authenticate Session
+                        </button>
+                    </form>
+
+                    <hr class="my-4" />
+
+                    <div class="text-center">
+                        <p class="text-muted small mb-2">Don't have an account?</p>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary w-100 py-2 text-uppercase font-weight-bold">
+                            Create New Account
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer bg-light text-center py-3 border-0">
+                    <span class="text-muted small text-italic">Forgot Your Password? You Can Email Us On "support@clinic.com" Or Call Our Helpdesk On 97334440991.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<HealthcareClinic.API.Models.Entities.DoctorSchedule>
+
+<h2>Doctor Schedule</h2>
+
+<a class="btn btn-success"
+   href="@Url.Action("Create", new { doctorId = ViewBag.DoctorId })">
+    Add Schedule
+</a>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Start</th>
+            <th>End</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Day</td>
+                <td>@item.StartTime</td>
+                <td>@item.EndTime</td>
+                <td>
+                    <a class="btn btn-danger"
+                       href="@Url.Action("Delete", new { id = item.Id })">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

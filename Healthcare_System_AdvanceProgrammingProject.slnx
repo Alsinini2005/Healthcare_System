@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Healthcare_MVC/Healthcare_MVC.csproj" Id="09470afc-6b08-40b2-8862-49e669061d63" />
+  <Project Path="Healthcare_Reporting_MVC/ReportingApp.csproj" Id="b4a8a184-d8a6-4c3e-9ea1-bcdaa932b330" />
+  <Project Path="Healthcare_System_AdavanceProgrammingProject/Healthcare_System_AdavanceProgrammingProject.csproj" />
+</Solution>

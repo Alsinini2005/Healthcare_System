@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Welcome Portal";
+}
+
+<div class="container py-5 mt-3">
+    <div class="text-center mb-5 p-5 bg-light rounded-3 border border-light shadow-sm">
+        <h1 class="display-4 font-weight-bold text-dark mb-2">Integrated Healthcare Clinic Management Architecture</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            Welcome to the centralized clinic operational system. Please choose your portal entry checkpoint below to access medical lookups, tracking records, or employee dashboards.
+        </p>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        <div class="col-md-5">
+            <div class="card h-100 border-0 border-top border-5 border-warning shadow-sm rounded-3">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="display-5 text-warning mb-3"><i class="bi bi-search"></i></div>
+                        <h4 class="card-title text-dark font-weight-bold mb-2">Anonymous Patient Portal</h4>
+                        <p class="card-text text-muted font-small px-2">
+                            For clinic visitors and outpatients. Enter your National CPR number and unique Reference Identifier token string to look up upcoming medical consultation timings and view active check-in queue statuses in real-time.
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a asp-controller="PublicLookup" asp-action="Index" class="btn btn-warning w-100 py-2 font-weight-bold text-dark text-uppercase shadow-sm">
+                            Launch Appointment Lookup
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card h-100 border-0 border-top border-5 border-primary shadow-sm rounded-3">
+                <div class="card-body p-4 text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="display-5 text-primary mb-3"><i class="bi bi-shield-lock-fill"></i></div>
+                        <h4 class="card-title text-dark font-weight-bold mb-2">Internal Staff Directory Channel</h4>
+                        <p class="card-text text-muted font-small px-2">
+                            Restricted to authorized clinic Users. 
+                        </p>
+                    </div>
+                    <div class="mt-4">
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary w-100 py-2 font-weight-bold text-uppercase shadow-sm">
+                            Access Personnel Station
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

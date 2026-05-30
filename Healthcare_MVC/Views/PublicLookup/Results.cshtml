@@ -1,0 +1,68 @@
+﻿@model List<HealthcareClinic.API.Models.DTOs.PublicAppointmentDto>
+@{
+    ViewData["Title"] = "Your Schedule Summary";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="text-dark font-weight-bold mb-0">Patient Schedule Summary</h2>
+            <p class="text-muted small mb-0">Live data fetched from the clinic core database tier.</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm px-3">
+            <i class="bi bi-arrow-left"></i> Back to Search
+        </a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center py-5 shadow-sm rounded-3">
+            <div class="display-6 mb-2"><i class="bi bi-calendar-x"></i></div>
+            <h5>No Active Upcoming Appointments</h5>
+            <p class="text-muted mb-0 small">You currently have no pending, checked-in, or active clinic appointment requests scheduled.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var app in Model)
+            {
+                // Dynamic styling switches based on appointment status strings
+                string statusBadgeClass = app.Status switch
+                {
+                    "Confirmed" => "bg-primary text-white",
+                    "CheckedIn" => "bg-warning text-dark",
+                    "InProgress" => "bg-info text-white",
+                    _ => "bg-secondary text-white"
+                };
+
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 border-start border-primary border-4 shadow-sm rounded-2">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title text-dark font-weight-bold mb-0">Dr. @app.DoctorName</h5>
+                                <span class="badge @statusBadgeClass font-small px-2.5 py-1.5 text-uppercase">@app.Status</span>
+                            </div>
+
+                            <h6 class="text-primary font-weight-bold small mb-3">
+                                <i class="bi bi-heart-pulse"></i> @app.Specialty Department
+                            </h6>
+
+                            <div class="bg-light p-3 rounded-2 small mb-3 text-muted">
+                                <p class="mb-1"><strong>Scheduled Timing:</strong></p>
+                                <p class="mb-0 text-dark font-weight-bold"><i class="bi bi-clock"></i> @app.AppointmentDate.ToString("f")</p>
+                            </div>
+
+                            <div class="border-top pt-2">
+                                <p class="mb-1 text-muted small"><strong>Last Recorded Clinical Diagnosis:</strong></p>
+                                <p class="mb-0 text-dark font-italic small bg-light p-2 border-start border-3 rounded-1">
+                                    <i class="bi bi-journal-text text-primary"></i> @app.RecentVisitSummary
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

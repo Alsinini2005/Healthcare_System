@@ -1,0 +1,99 @@
+﻿@model IEnumerable<HealthcareClinic.API.Models.Entities.User>
+
+@{
+    ViewData["Title"] = "Reception Roster";
+}
+  
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3 class="fw-bold">
+            <i class="bi bi-people"></i>
+            Reception Roster
+        </h3>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle"></i>
+            Add Receptionist
+
+        </a>
+
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3">
+
+        <div class="card-body p-0">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>CPR</th>
+                        <th width="150">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5"
+                                class="text-center text-muted py-4">
+
+                                No receptionists found.
+
+                            </td>
+                        </tr>
+                    }
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>#@item.Id</td>
+                            <td>@item.Name</td>
+                            <td>@item.Email</td>
+                            <td>@item.CPR</td>
+
+                            <td>
+
+                                <form asp-action="Delete"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@item.Id" />
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Remove this receptionist?')">
+
+                                        <i class="bi bi-trash"></i>
+                                        Remove
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>

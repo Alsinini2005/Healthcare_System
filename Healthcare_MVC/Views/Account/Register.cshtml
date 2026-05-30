@@ -1,0 +1,76 @@
+﻿@model Healthcare_System_AdavanceProgrammingProject.Models.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Create Patient Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-success text-white text-center py-4 border-0">
+                    <h4 class="mb-1 text-uppercase font-weight-bold text-white">Create Patient Account</h4>
+                    <p class="mb-0 text-white-50 small">Register to track your clinic appointments</p>
+                </div>
+                <div class="card-body p-4">
+
+                    @if (ViewBag.SuccessMessage != null)
+                    {
+                        <div class="alert alert-success">@ViewBag.SuccessMessage</div>
+                    }
+
+                    <form asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label font-weight-bold text-dark small">Full Name</label>
+                            <input asp-for="Name" class="form-control form-control-lg border-2 shadow-sm" placeholder="e.g. Ali Mansoor" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label font-weight-bold text-dark small">Email Address</label>
+                            <input asp-for="Email" class="form-control form-control-lg border-2 shadow-sm" placeholder="your@email.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CPRNumber" class="form-label font-weight-bold text-dark small">CPR Number</label>
+                            <input asp-for="CPRNumber" class="form-control form-control-lg border-2 shadow-sm" placeholder="e.g. 990123456" />
+                            <span asp-validation-for="CPRNumber" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label font-weight-bold text-dark small">Password</label>
+                            <input asp-for="Password" class="form-control form-control-lg border-2 shadow-sm" placeholder="••••••••" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ConfirmPassword" class="form-label font-weight-bold text-dark small">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" class="form-control form-control-lg border-2 shadow-sm" placeholder="••••••••" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm py-2 text-uppercase font-weight-bold">
+                            Create Account
+                        </button>
+                    </form>
+
+                    <hr class="my-4" />
+
+                    <div class="text-center">
+                        <p class="text-muted small mb-2">Already have an account?</p>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary w-100 py-2 text-uppercase font-weight-bold">
+                            Back to Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,257 @@
+﻿@model Healthcare_System_AdavanceProgrammingProject.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Receptionist Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <input type="hidden" id="jwtToken" value="@ViewBag.JwtToken" />
+    <div class="col-md-11 mx-auto">
+        <h3 class="mb-4 text-dark font-weight-bold">
+            <i class="bi bi-clipboard2-pulse"></i> Receptionist Operations Console
+        </h3>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger shadow-sm">@TempData["ErrorMessage"]</div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success shadow-sm">@TempData["SuccessMessage"]</div>
+        }
+
+        @* ── Create Appointment Form ── *@
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-primary text-white font-weight-bold py-3">
+                Schedule New Appointment
+            </div>
+            <div class="card-body">
+                <form asp-action="CreateAppointment" method="post" class="row g-3">
+
+                    <!-- CPR -->
+                    <div class="col-md-3">
+                        <label class="form-label small font-weight-bold">Patient CPR</label>
+                        <input name="PatientCPR"
+                               class="form-control border-2"
+                               placeholder="Enter CPR"
+                               required />
+                    </div>
+
+                    <!-- Specialty -->
+                    <div class="col-md-3">
+                        <label class="form-label small font-weight-bold">Specialty</label>
+
+                        <select id="specialtyDropdown"
+                                asp-for="NewAppointmentPlaceholder.Specialty"
+                                class="form-select border-2"
+                                required>
+
+                            <option value="">-- Select Specialty --</option>
+
+                            @foreach (var specialty in ViewBag.AllSpecializations)
+                            {
+                                <option value="@specialty.Name">
+                                    @specialty.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Doctor -->
+                    <div class="col-md-3">
+                        <label class="form-label small font-weight-bold">Doctor</label>
+
+                        <select id="doctorDropdown"
+                                asp-for="NewAppointmentPlaceholder.DoctorId"
+                                class="form-select border-2"
+                                required>
+
+                            <option value="">-- Select Doctor --</option>
+                        </select>
+                    </div>
+
+                    <!-- Date & Time -->
+                    <div class="col-md-3">
+                        <label class="form-label small font-weight-bold">Date & Time</label>
+
+                        @{
+                            var minDate = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+                        }
+
+                        <input asp-for="NewAppointmentPlaceholder.AppointmentDate"
+                               type="datetime-local"
+                               min="@minDate"
+                               class="form-control border-2"
+                               required />
+                    </div>
+
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-primary font-weight-bold px-4">
+                            Book Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @* ── Appointments Table ── *@
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-info text-white font-weight-bold py-3">
+                Live Appointment Queue
+            </div>
+            <div class="card-body p-0 table-responsive">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Specialty</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ActiveAppointments)
+                        {
+                        string badgeColor = item.Status switch
+                            {
+                            "Requested" => "bg-warning text-dark",
+                            "InProgress" => "bg-primary",
+                            "Completed" => "bg-success",
+                            "Missed" => "bg-danger",
+                            _ => "bg-secondary"
+                            };
+
+                            <tr id="row-@item.Id">
+                                <td class="font-weight-bold">#@item.Id</td>
+                                <td>@item.Patient?.Name</td>
+                                <td>Dr. @(item.Doctor?.Name ?? "Staff Physician")</td>
+                                <td><span class="badge bg-light text-dark border">@item.Specialty</span></td>
+                                <td>@item.AppointmentDate.ToString("g")</td>
+                                <td>
+
+                                <span id="badge-@item.Id"
+                                      class="badge @badgeColor">
+
+                                    @item.Status
+
+                                </span>
+
+                                @if (item.Status == "Requested")
+                                {
+                                    <div class="mt-2">
+
+                                        <form asp-action="StartVisit"
+                                  method="post"
+                                  class="mt-2">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="appointmentId"
+                                       value="@item.Id" />
+
+                                <button type="submit"
+                                        class="btn btn-primary btn-sm">
+
+                                    Start Visit
+
+                                </button>
+
+                            </form>
+
+                                    </div>
+                                }
+
+                            </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ── SignalR Live Status Updates ── *@
+@section Scripts {
+    <script>
+        const doctors = [
+        @foreach (var doctor in Model.ClinicDoctors)
+        {
+                var specs = doctor.DoctorSpecializations?
+                        .Select(ds => ds.Specialization?.Name)
+                        .Where(x => !string.IsNullOrWhiteSpace(x))
+                        .ToList() ?? new List<string>();
+
+                <text>
+                    {
+                        id: @doctor.Id,
+                        name: "@doctor.Name",
+                        specialties: [@Html.Raw(string.Join(",", specs.Select(s => $"\"{s}\"")))]
+                    },
+                </text>
+        }
+        ];
+
+        const specialtyDropdown = document.getElementById("specialtyDropdown");
+        const doctorDropdown = document.getElementById("doctorDropdown");
+
+        specialtyDropdown.addEventListener("change", function () {
+
+            doctorDropdown.innerHTML =
+                '<option value="">-- Select Doctor --</option>';
+
+            const selectedSpecialty = this.value;
+
+            const filteredDoctors = doctors.filter(d =>
+                d.specialties.includes(selectedSpecialty)
+            );
+
+            filteredDoctors.forEach(doc => {
+                const option = document.createElement("option");
+
+                option.value = doc.id;
+                option.textContent = "Dr. " + doc.name;
+
+                doctorDropdown.appendChild(option);
+            });
+        });
+    </script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/appointmentHub")
+        .build();
+
+        // Color map matching all 7 statuses
+        const colorMap = {
+        "Requested":  "bg-warning text-dark",
+        "InProgress": "bg-primary",
+        "Completed":  "bg-success",
+        "Missed":     "bg-danger"
+        };
+
+        connection.on("ReceiveStatusUpdate", function (appointmentId, patientName, newStatus) {
+        const badge = document.getElementById("badge-" + appointmentId);
+        if (badge) {
+        badge.textContent = newStatus;
+        badge.className = "badge " + (colorMap[newStatus] || "bg-secondary");
+        }
+        });
+
+        connection.start().catch(err => console.error("SignalR error:", err));
+
+        function triggerStatusUpdate(appointmentId, newStatus) {
+        // Read JWT from hidden field set by the layout
+        const token = document.getElementById("jwtToken")?.value ?? "";
+        fetch(`/api/appointments/update-status/${appointmentId}?status=${newStatus}`, {
+        method: "PUT",
+        headers: { "Authorization": "Bearer " + token }
+        }).then(res => {
+        if (!res.ok) res.json().then(e => alert(e.message));
+        }).catch(err => console.error("Status update failed:", err));
+        }
+    </script>
+}

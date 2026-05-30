@@ -1,0 +1,74 @@
+﻿@model IEnumerable<HealthcareClinic.API.Models.Entities.Patient>
+@{
+    ViewData["Title"] = "Patient Registration Registry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success shadow-sm">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger shadow-sm">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-dark text-white font-weight-bold">Register New Patient File</div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label class="form-label small text-muted font-weight-bold">Full Legal Name</label>
+                            <input name="name" class="form-control" placeholder="e.g. Ali Mansoor" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small text-muted font-weight-bold">National CPR ID Number</label>
+                            <input name="cprNumber" class="form-control" placeholder="e.g. 990123456" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small text-muted font-weight-bold">Email Address</label>
+                            <input name="email" type="email" class="form-control" placeholder="patient@example.com" required />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small text-muted font-weight-bold">Temporary Password</label>
+                            <input name="password" type="password" class="form-control" placeholder="Min. 6 characters" required />
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 font-weight-bold">Open Medical File</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-primary text-white font-weight-bold">Active Patient Directory Records</div>
+                <div class="card-body p-0 table-responsive">
+                    <table class="table table-hover align-middle text-center mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>File ID</th>
+                                <th>Full Name</th>
+                                <th>CPR Number</th>
+                                <th>Lookup Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var pat in Model)
+                            {
+                                <tr>
+                                    <td class="font-weight-bold">#@pat.Id</td>
+                                    <td>@pat.Name</td>
+                                    <td>@pat.CPRNumber</td>
+                                    <td><code class="text-primary font-weight-bold">@pat.PatientReferenceNumber</code></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
