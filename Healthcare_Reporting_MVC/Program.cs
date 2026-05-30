@@ -1,3 +1,5 @@
+
+
 using HealthcareClinic.ReportingApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -9,6 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<ReportingApiService>(client =>
 {
     var apiUrl = builder.Configuration["ClinicApiSettings:BaseUrl"] ?? "https://localhost:7085/";
+
     client.BaseAddress = new Uri(apiUrl);
 });
 
@@ -18,17 +21,21 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
+       
         options.ExpireTimeSpan = TimeSpan.FromHours(3);
+
     });
 
 // Store JWT token in session so ReportingApiService can use it
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(3);
+
     options.Cookie.HttpOnly = true;
 });
 
 builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 
@@ -40,13 +47,16 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
+
 
 app.Run();
