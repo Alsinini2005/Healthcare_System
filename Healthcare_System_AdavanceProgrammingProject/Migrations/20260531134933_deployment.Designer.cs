@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 {
     [DbContext(typeof(ClinicDbContext))]
-    [Migration("20260525002011_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260531134933_deployment")]
+    partial class deployment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,6 +103,10 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CPR")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DaysOff")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -124,7 +128,8 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Doctors");
 
@@ -132,6 +137,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 1,
+                            CPR = "234567891",
                             DaysOff = "Friday, Saturday",
                             Email = "sarah.ahmed@clinic.com",
                             Name = "Dr. Sarah Ahmed",
@@ -141,12 +147,43 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 2,
+                            CPR = "345678912",
                             DaysOff = "Friday, Saturday",
                             Email = "khalid.nasser@clinic.com",
                             Name = "Dr. Khalid Nasser",
                             UserId = 3,
                             WorkingHours = "09:00 - 17:00"
                         });
+                });
+
+            modelBuilder.Entity("HealthcareClinic.API.Models.Entities.DoctorSchedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("DoctorSchedules");
                 });
 
             modelBuilder.Entity("HealthcareClinic.API.Models.Entities.DoctorSpecialization", b =>
@@ -340,9 +377,16 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CPR")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -364,7 +408,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 1,
+                            CPR = "123456789",
                             Email = "hadi@clinic.com",
+                            IsActive = true,
                             Name = "Hadi Al-Mansoori",
                             PasswordHash = "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O",
                             Role = "ClinicManager"
@@ -372,7 +418,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 2,
+                            CPR = "234567891",
                             Email = "sarah.ahmed@clinic.com",
+                            IsActive = true,
                             Name = "Dr. Sarah Ahmed",
                             PasswordHash = "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O",
                             Role = "Doctor"
@@ -380,7 +428,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 3,
+                            CPR = "345678912",
                             Email = "khalid.nasser@clinic.com",
+                            IsActive = true,
                             Name = "Dr. Khalid Nasser",
                             PasswordHash = "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O",
                             Role = "Doctor"
@@ -388,7 +438,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 4,
+                            CPR = "456789123",
                             Email = "fatima@example.com",
+                            IsActive = true,
                             Name = "Fatima Al-Zayed",
                             PasswordHash = "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O",
                             Role = "Receptionist"
@@ -396,7 +448,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 5,
+                            CPR = "567891234",
                             Email = "ali@example.com",
+                            IsActive = true,
                             Name = "Ali Mansoor",
                             PasswordHash = "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O",
                             Role = "Patient"
@@ -404,7 +458,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 6,
+                            CPR = "678912345",
                             Email = "mariam@example.com",
+                            IsActive = true,
                             Name = "Mariam Hassan",
                             PasswordHash = "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O",
                             Role = "Patient"
@@ -488,12 +544,23 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
             modelBuilder.Entity("HealthcareClinic.API.Models.Entities.Doctor", b =>
                 {
                     b.HasOne("HealthcareClinic.API.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("DoctorProfile")
+                        .HasForeignKey("HealthcareClinic.API.Models.Entities.Doctor", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HealthcareClinic.API.Models.Entities.DoctorSchedule", b =>
+                {
+                    b.HasOne("HealthcareClinic.API.Models.Entities.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("HealthcareClinic.API.Models.Entities.DoctorSpecialization", b =>
@@ -595,6 +662,8 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 
             modelBuilder.Entity("HealthcareClinic.API.Models.Entities.User", b =>
                 {
+                    b.Navigation("DoctorProfile");
+
                     b.Navigation("Notifications");
                 });
 

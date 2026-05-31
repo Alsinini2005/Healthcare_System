@@ -8,14 +8,14 @@ namespace HealthcareClinic.API.Models.Entities
         public int Id { get; set; }
 
         public int UserId { get; set; }
-        public string CPR { get; set; } = string.Empty;
+        
         public string Name { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "CPR is required.")]
         [RegularExpression(@"^\d{9}$", ErrorMessage = "CPR must contain exactly 9 digits.")]
-
+        public string CPR { get; set; } = string.Empty;
         public string DaysOff { get; set; } = "Friday, Saturday";
         public string WorkingHours { get; set; } = "08:00 - 16:00";
         public User? User { get; set; }

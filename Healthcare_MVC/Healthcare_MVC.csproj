@@ -20,7 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Healthcare_System_AdavanceProgrammingProject\Healthcare_System_AdavanceProgrammingProject.csproj" />
+    
+	  <ProjectReference Include="..\Healthcare_System_AdavanceProgrammingProject\Healthcare_System_AdavanceProgrammingProject.csproj" >
+		  <Private>false</Private>
+		  <ExcludeAssets>contentFiles</ExcludeAssets>
+	  </ProjectReference>
   </ItemGroup>
+	
 
 </Project>

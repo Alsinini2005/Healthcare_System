@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 {
     [DbContext(typeof(ClinicDbContext))]
-    [Migration("20260530190456_test")]
-    partial class test
+    [Migration("20260530211327_newDatabase")]
+    partial class newDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,8 +103,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("CPR")
-                        .HasColumnType("bigint");
+                    b.Property<string>("CPR")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DaysOff")
                         .IsRequired()
@@ -136,7 +137,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 1,
-                            CPR = 234567891L,
+                            CPR = "234567891",
                             DaysOff = "Friday, Saturday",
                             Email = "sarah.ahmed@clinic.com",
                             Name = "Dr. Sarah Ahmed",
@@ -146,7 +147,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 2,
-                            CPR = 345678912L,
+                            CPR = "345678912",
                             DaysOff = "Friday, Saturday",
                             Email = "khalid.nasser@clinic.com",
                             Name = "Dr. Khalid Nasser",
@@ -376,8 +377,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("CPR")
-                        .HasColumnType("bigint");
+                    b.Property<string>("CPR")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -406,7 +408,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 1,
-                            CPR = 123456789L,
+                            CPR = "123456789",
                             Email = "hadi@clinic.com",
                             IsActive = true,
                             Name = "Hadi Al-Mansoori",
@@ -416,7 +418,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 2,
-                            CPR = 234567891L,
+                            CPR = "234567891",
                             Email = "sarah.ahmed@clinic.com",
                             IsActive = true,
                             Name = "Dr. Sarah Ahmed",
@@ -426,7 +428,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 3,
-                            CPR = 345678912L,
+                            CPR = "345678912",
                             Email = "khalid.nasser@clinic.com",
                             IsActive = true,
                             Name = "Dr. Khalid Nasser",
@@ -436,7 +438,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 4,
-                            CPR = 456789123L,
+                            CPR = "456789123",
                             Email = "fatima@example.com",
                             IsActive = true,
                             Name = "Fatima Al-Zayed",
@@ -446,7 +448,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 5,
-                            CPR = 567891234L,
+                            CPR = "567891234",
                             Email = "ali@example.com",
                             IsActive = true,
                             Name = "Ali Mansoor",
@@ -456,7 +458,7 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         new
                         {
                             Id = 6,
-                            CPR = 678912345L,
+                            CPR = "678912345",
                             Email = "mariam@example.com",
                             IsActive = true,
                             Name = "Mariam Hassan",

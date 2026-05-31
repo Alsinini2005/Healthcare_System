@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class newDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,8 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CPR = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -50,10 +52,11 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    CPR = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WorkingHours = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DaysOff = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DaysOff = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WorkingHours = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,9 +98,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PatientReferenceNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CPRNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientReferenceNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,6 +111,29 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DoctorSchedules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    Day = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoctorSchedules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DoctorSchedules_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -140,12 +166,12 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
                     AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Specialty = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DoctorNotes = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DoctorNotes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Specialty = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,8 +233,8 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VisitRecordId = table.Column<int>(type: "int", nullable: false),
                     MedicationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dosage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Frequency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dosage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -233,24 +259,24 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "Name", "PasswordHash", "Role" },
+                columns: new[] { "Id", "CPR", "Email", "IsActive", "Name", "PasswordHash", "Role" },
                 values: new object[,]
                 {
-                    { 1, "hadi@clinic.com", "Hadi Al-Mansoori", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "ClinicManager" },
-                    { 2, "sarah.ahmed@clinic.com", "Dr. Sarah Ahmed", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Doctor" },
-                    { 3, "khalid.nasser@clinic.com", "Dr. Khalid Nasser", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Doctor" },
-                    { 4, "fatima@example.com", "Fatima Al-Zayed", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Receptionist" },
-                    { 5, "ali@example.com", "Ali Mansoor", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Patient" },
-                    { 6, "mariam@example.com", "Mariam Hassan", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Patient" }
+                    { 1, "123456789", "hadi@clinic.com", true, "Hadi Al-Mansoori", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "ClinicManager" },
+                    { 2, "234567891", "sarah.ahmed@clinic.com", true, "Dr. Sarah Ahmed", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Doctor" },
+                    { 3, "345678912", "khalid.nasser@clinic.com", true, "Dr. Khalid Nasser", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Doctor" },
+                    { 4, "456789123", "fatima@example.com", true, "Fatima Al-Zayed", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Receptionist" },
+                    { 5, "567891234", "ali@example.com", true, "Ali Mansoor", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Patient" },
+                    { 6, "678912345", "mariam@example.com", true, "Mariam Hassan", "$2a$11$JuK.0gfwfl//T8amWFACiuCqSXEEAixxeJTz0OACExeoQvNf.W/3O", "Patient" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Doctors",
-                columns: new[] { "Id", "DaysOff", "Email", "Name", "UserId", "WorkingHours" },
+                columns: new[] { "Id", "CPR", "DaysOff", "Email", "Name", "UserId", "WorkingHours" },
                 values: new object[,]
                 {
-                    { 1, "Friday, Saturday", "sarah.ahmed@clinic.com", "Dr. Sarah Ahmed", 2, "08:00 - 16:00" },
-                    { 2, "Friday, Saturday", "khalid.nasser@clinic.com", "Dr. Khalid Nasser", 3, "09:00 - 17:00" }
+                    { 1, "234567891", "Friday, Saturday", "sarah.ahmed@clinic.com", "Dr. Sarah Ahmed", 2, "08:00 - 16:00" },
+                    { 2, "345678912", "Friday, Saturday", "khalid.nasser@clinic.com", "Dr. Khalid Nasser", 3, "09:00 - 17:00" }
                 });
 
             migrationBuilder.InsertData(
@@ -304,7 +330,13 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Doctors_UserId",
                 table: "Doctors",
-                column: "UserId");
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorSchedules_DoctorId",
+                table: "DoctorSchedules",
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DoctorSpecializations_SpecializationId",
@@ -346,6 +378,9 @@ namespace Healthcare_System_AdavanceProgrammingProject.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DoctorSchedules");
+
             migrationBuilder.DropTable(
                 name: "DoctorSpecializations");
 
