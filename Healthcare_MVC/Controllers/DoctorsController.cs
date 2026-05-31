@@ -109,7 +109,21 @@ namespace Healthcare_System_AdavanceProgrammingProject.MVC.Controllers
         }
 
         // ========================= EDIT =========================
+        // GET: Edit
+        [HttpGet]
+        [Authorize(Roles = "ClinicManager")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var doctor = await _context.Doctors
+                .Include(d => d.DoctorSpecializations)
+                .FirstOrDefaultAsync(d => d.Id == id);
 
+            if (doctor == null)
+                return NotFound();
+
+            ViewBag.AllSpecializations = await _context.Specializations.ToListAsync();
+            return View(doctor);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "ClinicManager")]
